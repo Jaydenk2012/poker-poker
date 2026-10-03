@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08111f" />
+  <meta name="description" content="Neon Poker Arena — polished poker-inspired card battles with AI and room-code multiplayer." />
+  <title>Neon Poker Arena</title>
+  <link rel="icon" href="/assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="/socket.io/socket.io.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><img src="/assets/logo.svg" alt="Neon Poker"/><div><b>NEON POKER</b><span>ARENA</span></div></div>
+    <nav>
+      <button class="nav-item active" data-view="home">◈ <span>Lobby</span></button>
+      <button class="nav-item" data-view="single">◉ <span>Single Player</span></button>
+      <button class="nav-item" data-view="multi">◎ <span>Multiplayer</span></button>
+      <button class="nav-item" data-view="rules">◇ <span>How to Play</span></button>
+    </nav>
+    <div class="sidebar-foot"><span class="live-dot"></span> Server online</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><span class="eyebrow">THE ULTIMATE CARD ARENA</span><h1 id="pageTitle">Play the table your way.</h1></div>
+      <div class="top-actions"><button class="icon-btn" id="soundBtn">♪</button><button class="icon-btn" id="themeBtn">☼</button><div class="avatar">P</div></div>
+    </header>
+
+    <section id="view-home" class="view active">
+      <div class="hero-card">
+        <div class="hero-copy"><span class="pill">NO REAL-MONEY WAGERING</span><h2>1000 chips.<br><em>One legendary table.</em></h2><p>Play fast poker-inspired hands against AI or gather friends with a private room code.</p><div class="hero-actions"><button class="primary" data-go="single">Start Single Player <span>→</span></button><button class="secondary" data-go="multi">Create Multiplayer Room</button></div></div>
+        <div class="hero-visual"><div class="orbit o1"></div><div class="orbit o2"></div><div class="glow-card ace">A<span>♠</span></div><div class="glow-card king">K<span>♥</span></div><div class="chip-stack"><i></i><i></i><i></i></div></div>
+      </div>
+      <div class="section-grid"><div class="feature"><span>01</span><h3>AI Personalities</h3><p>Three opponent levels tune risk, patience, and reveal choices.</p></div><div class="feature"><span>02</span><h3>Room Codes</h3><p>Make a private lobby and share a compact code with friends.</p></div><div class="feature"><span>03</span><h3>Responsive Table</h3><p>Designed to feel premium on laptop, tablet, and mobile.</p></div></div>
+    </section>
+
+    <section id="view-single" class="view">
+      <div class="setup-wrap"><div class="setup-panel"><span class="eyebrow">SINGLE PLAYER</span><h2>Build your table.</h2><div class="field-group"><label>Opponent level</label><div class="segmented" id="levelSeg"><button data-level="easy">Easy</button><button data-level="medium" class="selected">Medium</button><button data-level="hard">Hard</button></div></div><div class="field-group"><label>Number of opponents</label><div class="segmented" id="countSeg"><button data-count="1">1</button><button data-count="2">2</button><button data-count="3" class="selected">3</button><button data-count="4">4</button></div></div><div class="safe-note">Starting score: <b>1,000 chips</b> each. Chips are score only and cannot be cashed out.</div><button class="primary wide" id="startSingle">Enter the table <span>→</span></button></div><div class="setup-art"><div class="robot">♠</div><div class="art-caption">FOCUS<br/><b>READ THE TABLE</b></div></div></div>
+    </section>
+
+    <section id="view-multi" class="view">
+      <div class="multi-grid"><div class="lobby-panel"><span class="eyebrow">MULTIPLAYER</span><h2>Play with your crew.</h2><input id="playerName" maxlength="20" placeholder="Your display name"/><button class="primary wide" id="createRoom">Create room</button><div class="divider">OR JOIN A ROOM</div><div class="join-row"><input id="roomCode" maxlength="6" placeholder="ROOM CODE"/><button class="secondary" id="joinRoom">Join</button></div><button class="secondary wide" id="readyRoom" disabled>Ready for hand</button><p id="multiMsg" class="muted"></p></div><div class="room-preview"><div class="mini-top"><span>LIVE ROOM</span><b id="roomCodePreview">—</b></div><div class="room-table"><div class="table-felt"><span>♠</span><div id="roomStatus">Create or join a room to begin.</div></div></div><div class="players-strip" id="playersStrip"></div></div></div>
+    </section>
+
+    <section id="view-rules" class="view"><div class="rules-card"><span class="eyebrow">HOW TO PLAY</span><h2>Five cards. One best hand.</h2><div class="rules-grid"><div><b>01 · Deal</b><p>Each player receives two private cards.</p></div><div><b>02 · Community</b><p>The table reveals flop, turn, and river.</p></div><div><b>03 · Decide</b><p>Reveal the next street or fold your hand.</p></div><div><b>04 · Showdown</b><p>The best five-card poker hand wins +100 score chips.</p></div></div><p class="muted">This edition is designed as a skill-based, non-monetary game: chips are only a scoreboard.</p></div></section>
+
+    <section id="game" class="game view"><div class="gamebar"><button class="secondary" id="backLobby">← Lobby</button><button class="secondary" id="readyGame" style="display:none">Ready for next hand</button><div class="room-label" id="gameLabel">SINGLE PLAYER</div><div class="score-pill"><span>You</span><b id="humanChips">1,000</b></div></div><div class="table-scene"><div class="table-wood"></div><div class="table-felt"><div class="felt-logo">♠<small>NEON POKER</small></div><div class="community" id="community"></div><div class="pot-display"><span>TABLE SCORE</span><b id="potText">—</b></div><div class="seat s1"><div class="seat-avatar">AI</div><div><b id="opp1Name">Computer</b><small id="opp1Score">1,000</small></div><div class="hand-back">▣ ▣</div></div><div class="seat s2"><div class="seat-avatar">AI</div><div><b id="opp2Name">Computer</b><small id="opp2Score">1,000</small></div><div class="hand-back">▣ ▣</div></div><div class="seat s3"><div class="seat-avatar">AI</div><div><b id="opp3Name">Computer</b><small id="opp3Score">1,000</small></div><div class="hand-back">▣ ▣</div></div><div class="human-seat"><div class="big-avatar">P</div><div class="human-name">YOU <small id="humanHandName">Ready</small></div><div class="human-cards" id="humanCards"></div></div></div></div><div class="actionbar"><div><span id="gameMessage">Ready.</span><small>Non-monetary score mode</small></div><div class="action-buttons"><button class="danger" id="foldBtn">Fold</button><button class="secondary" id="nextBtn">Reveal Next</button><button class="primary" id="showdownBtn">Showdown</button></div></div></section>
+  </main>
+</div>
+<div id="toast"></div>
+</body></html>
