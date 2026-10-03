@@ -1,0 +1,17 @@
+{
+  "name": "neon-poker-arena",
+  "version": "1.0.0",
+  "private": true,
+  "description": "High-quality browser poker-inspired card arena with AI and room-code multiplayer.",
+  "type": "commonjs",
+  "scripts": {
+    "build": "node build.js",
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}
